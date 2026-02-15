@@ -1,668 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anchor — Real-time trading discipline</title>
-  <meta name="description" content="Anchor enforces cooldown protocols when emotional trading patterns emerge — on TradingView." />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Anchor — Trading Discipline</title>
 
-  <style>
-    :root{
-      --bg0:#05070c;
-      --bg1:#070b12;
-      --bg2:#0b1220;
+<style>
+  :root{
+    --bg0:#050814;
+    --bg1:#070b12;
+    --bg2:#0b1220;
 
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.62);
-      --dim:rgba(255,255,255,.45);
+    --text:rgba(255,255,255,.92);
+    --muted:rgba(255,255,255,.62);
+    --muted2:rgba(255,255,255,.45);
 
-      --card:rgba(255,255,255,.06);
-      --card2:rgba(255,255,255,.04);
-      --border:rgba(255,255,255,.10);
-      --border2:rgba(255,255,255,.14);
+    --card:rgba(255,255,255,.05);
+    --card2:rgba(255,255,255,.035);
+    --border:rgba(255,255,255,.10);
 
-      --btn:#79c48f;
-      --btnText:#06130a;
+    --accent:#79c48f;
+    --accentText:#06130a;
 
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
-      --radius: 18px;
-      --radius2: 14px;
+    --shadow: 0 24px 70px rgba(0,0,0,.55);
+  }
 
-      --max: 1040px;
-    }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
-      background:
-        radial-gradient(1100px 600px at 50% 18%, rgba(255,255,255,.07), transparent 55%),
-        radial-gradient(900px 500px at 20% 40%, rgba(121,196,143,.10), transparent 60%),
-        radial-gradient(900px 500px at 80% 55%, rgba(120,130,255,.08), transparent 60%),
-        linear-gradient(135deg,var(--bg1),var(--bg2));
-      overflow-x:hidden;
-    }
+    background:
+      radial-gradient(900px 520px at 50% 18%, rgba(255,255,255,.06), transparent 60%),
+      radial-gradient(900px 520px at 20% 72%, rgba(90,140,255,.08), transparent 60%),
+      radial-gradient(900px 520px at 82% 74%, rgba(70,255,210,.05), transparent 60%),
+      linear-gradient(135deg, var(--bg1), var(--bg2));
+  }
 
-    a{color:inherit}
-    .container{width:min(var(--max), 92vw); margin:0 auto;}
-    .topbar{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(to bottom, rgba(5,7,12,.75), rgba(5,7,12,.40));
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 0;
-    }
-    .brand{
-      display:flex; gap:10px; align-items:center;
-      font-weight:800;
-      letter-spacing:-0.02em;
-    }
-    .brand .dot{
-      width:10px; height:10px; border-radius:50%;
-      background: var(--btn);
-      box-shadow: 0 0 0 6px rgba(121,196,143,.12);
-    }
-    .navlinks{
-      display:flex; gap:16px; align-items:center;
-      color:var(--muted); font-weight:650; font-size:13px;
-    }
-    .navlinks a{ text-decoration:none; padding:8px 10px; border-radius:10px; }
-    .navlinks a:hover{ background:rgba(255,255,255,.05); color:rgba(255,255,255,.88); }
-    .navcta{
-      display:flex; gap:10px; align-items:center;
-    }
+  a{ color:inherit; }
 
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:12px 16px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:850;
-      border:1px solid rgba(0,0,0,.18);
-      background: var(--btn);
-      color: var(--btnText);
-      box-shadow: 0 14px 40px rgba(0,0,0,.45);
-      transition: transform .12s ease, filter .12s ease;
-      white-space:nowrap;
-    }
-    .btn:hover{ filter:brightness(1.05); transform: translateY(-1px); }
-    .btn:active{ transform: translateY(0px); }
+  .wrap{
+    width:min(980px, 92vw);
+    margin:0 auto;
+    padding:56px 0 64px;
+  }
 
-    .ghost{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:12px 14px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:750;
-      background: rgba(255,255,255,.05);
-      border:1px solid var(--border);
-      color:rgba(255,255,255,.80);
-      transition: background .12s ease, border-color .12s ease;
-      white-space:nowrap;
-    }
-    .ghost:hover{ background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.16); }
+  /* top bar */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:44px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+  }
+  .brand img{
+    width:22px;height:22px;opacity:.95;
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,.45));
+  }
+  .brand .name{
+    font-weight:700;
+    letter-spacing:.02em;
+  }
+  .toplinks{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    color:var(--muted);
+    font-size:13px;
+  }
+  .toplinks a{
+    text-decoration:none;
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px solid transparent;
+  }
+  .toplinks a:hover{
+    border-color:rgba(255,255,255,.12);
+    background:rgba(255,255,255,.03);
+    color:rgba(255,255,255,.84);
+  }
 
-    /* HERO */
-    .hero{
-      padding:74px 0 40px;
-    }
-    .heroGrid{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:28px;
-      align-items:center;
-    }
-    .kicker{
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:8px 12px;
-      border-radius:999px;
-      background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      color: rgba(255,255,255,.74);
-      font-weight:700;
-      font-size:12px;
-      width:fit-content;
-    }
-    .kicker span{
-      color: rgba(0,0,0,.75);
-      background: var(--btn);
-      padding:4px 8px;
-      border-radius:999px;
-      font-weight:900;
-    }
-    h1{
-      margin:14px 0 12px;
-      font-size: clamp(44px, 5.8vw, 74px);
-      letter-spacing:-0.03em;
-      line-height:1.02;
-    }
-    .sub{
-      margin:0 0 20px;
-      max-width:60ch;
-      color: rgba(255,255,255,.72);
-      font-size:16px;
-      line-height:1.65;
-    }
-    .heroActions{ display:flex; gap:12px; flex-wrap:wrap; margin:18px 0 0; }
-    .micro{
-      margin-top:12px;
-      color: rgba(255,255,255,.50);
-      font-size:12px;
-      display:flex; gap:12px; flex-wrap:wrap;
-    }
-    .micro b{ color: rgba(255,255,255,.78); font-weight:800; }
+  /* hero */
+  .hero{
+    text-align:center;
+    padding:46px 22px;
+    border-radius:26px;
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    border:1px solid var(--border);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(8px);
+  }
 
-    /* MOCK CARD */
-    .mock{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-      min-height: 360px;
-    }
-    .mock::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background: radial-gradient(600px 240px at 50% 0%, rgba(121,196,143,.18), transparent 60%);
-      pointer-events:none;
-    }
-    .mockTop{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 16px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      color: rgba(255,255,255,.78);
-      font-weight:800;
-      letter-spacing:-0.01em;
-    }
-    .pill{
-      font-size:12px;
-      font-weight:900;
-      padding:6px 10px;
-      border-radius:999px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      color: rgba(255,255,255,.78);
-    }
-    .mockBody{ padding:16px; }
-    .statRow{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-bottom:12px;
-    }
-    .stat{
-      background: rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius: 14px;
-      padding:12px;
-    }
-    .stat .label{
-      color: rgba(255,255,255,.45);
-      font-size:11px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      margin-bottom:6px;
-    }
-    .stat .value{
-      font-size:18px;
-      font-weight:900;
-    }
-    .mockBtn{
-      width:100%;
-      margin-top:10px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:14px;
-      padding:12px 12px;
-      text-align:center;
-      font-weight:900;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color: rgba(255,255,255,.78);
-    }
-    .mockBtn + .mockBtn{ margin-top:8px; }
-    .mockFoot{
-      margin-top:12px;
-      color: rgba(255,255,255,.45);
-      font-size:12px;
-      text-align:center;
-    }
+  .kicker{
+    font-size:11px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--muted2);
+    margin-bottom:14px;
+  }
 
-    /* SECTIONS */
-    section{ padding:48px 0; }
-    .sectionTitle{
-      margin:0 0 10px;
-      font-size: 28px;
-      letter-spacing:-0.02em;
-    }
-    .sectionSub{
-      margin:0 0 18px;
-      color: rgba(255,255,255,.65);
-      line-height:1.7;
-      max-width:75ch;
-    }
+  /* the serif vibe */
+  h1{
+    margin:0 0 14px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight:500;
+    letter-spacing:-.02em;
+    font-size:clamp(44px, 5.5vw, 74px);
+    line-height:1.03;
+  }
 
-    .grid3{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
-      margin-top:18px;
-    }
-    .card{
-      background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: var(--radius);
-      padding:16px;
-    }
-    .card h3{
-      margin:0 0 6px;
-      font-size:15px;
-      font-weight:900;
-      letter-spacing:-0.01em;
-    }
-    .card p{
-      margin:0;
-      color: rgba(255,255,255,.68);
-      line-height:1.65;
-      font-size:14px;
-    }
+  .tagline{
+    margin:0 auto 22px;
+    max-width:62ch;
+    font-size:15px;
+    line-height:1.7;
+    color:rgba(255,255,255,.72);
+  }
 
-    /* HOW IT WORKS */
-    .steps{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-      margin-top:18px;
-    }
-    .step{
-      background: rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: var(--radius);
-      padding:16px;
-    }
-    .step .num{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:28px; height:28px;
-      border-radius:999px;
-      background: rgba(121,196,143,.16);
-      border:1px solid rgba(121,196,143,.25);
-      color: rgba(255,255,255,.86);
-      font-weight:900;
-      margin-bottom:10px;
-      font-size:13px;
-    }
-    .step h4{ margin:0 0 6px; font-size:15px; font-weight:900; }
-    .step p{ margin:0; color: rgba(255,255,255,.68); line-height:1.65; font-size:14px; }
+  .actions{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin:22px 0 10px;
+  }
 
-    /* SCREENSHOT */
-    .shot{
-      margin-top:18px;
-      border-radius: var(--radius);
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      overflow:hidden;
-      box-shadow: var(--shadow);
-    }
-    .shot img{ display:block; width:100%; height:auto; }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:14px 20px;
+    border-radius:14px;
+    background:var(--accent);
+    color:var(--accentText);
+    text-decoration:none;
+    font-weight:850;
+    border:1px solid rgba(0,0,0,.18);
+    box-shadow: 0 14px 40px rgba(0,0,0,.45);
+  }
+  .btn:hover{ filter:brightness(1.05); }
 
-    /* INSTALL (DETAILS) */
-    details{
-      background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: var(--radius);
-      padding:16px;
-    }
-    details + details{ margin-top:10px; }
-    summary{
-      cursor:pointer;
-      list-style:none;
-      font-weight:900;
-      letter-spacing:-0.01em;
-      color: rgba(255,255,255,.88);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-    summary::-webkit-details-marker{ display:none; }
-    .chev{
-      width:28px;height:28px;border-radius:10px;
-      background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      display:grid; place-items:center;
-      color: rgba(255,255,255,.70);
-      font-weight:900;
-      flex:0 0 auto;
-    }
-    details[open] .chev{ color: rgba(0,0,0,.75); background: var(--btn); border-color: rgba(0,0,0,.15); }
-    .detailsBody{
-      margin-top:12px;
-      color: rgba(255,255,255,.70);
-      line-height:1.7;
-      font-size:14px;
-    }
-    .detailsBody ol{ margin:0; padding-left:18px; }
-    .kbd{
-      display:inline-flex;
-      padding:2px 8px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      font-weight:850;
-      font-size:13px;
-      color: rgba(255,255,255,.84);
-    }
+  .ghost{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:14px 18px;
+    border-radius:14px;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--border);
+    color:rgba(255,255,255,.80);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .ghost:hover{
+    border-color:rgba(255,255,255,.16);
+    background:rgba(255,255,255,.06);
+    color:rgba(255,255,255,.92);
+  }
 
-    /* FOOTER */
-    footer{
-      padding:42px 0 56px;
-      color: rgba(255,255,255,.52);
-      font-size:12px;
-      border-top:1px solid rgba(255,255,255,.06);
-      background: linear-gradient(to bottom, rgba(5,7,12,0), rgba(5,7,12,.55));
-    }
-    .footerGrid{
-      display:flex;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .fine{
-      max-width:80ch;
-      color: rgba(255,255,255,.45);
-      line-height:1.6;
-    }
+  .microtrust{
+    margin-top:10px;
+    font-size:12px;
+    color:rgba(255,255,255,.48);
+  }
 
-    /* MOBILE */
-    @media (max-width: 920px){
-      .heroGrid{ grid-template-columns: 1fr; }
-      .grid3{ grid-template-columns: 1fr; }
-      .steps{ grid-template-columns: 1fr; }
-      .navlinks{ display:none; }
-      .mock{ min-height: 320px; }
-    }
-  </style>
+  /* feature row */
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:14px;
+    margin-top:18px;
+    text-align:left;
+  }
+  .card{
+    padding:18px 18px;
+    border-radius:18px;
+    background:var(--card2);
+    border:1px solid rgba(255,255,255,.09);
+  }
+  .card .t{
+    font-size:11px;
+    letter-spacing:.20em;
+    text-transform:uppercase;
+    color:var(--muted2);
+    margin-bottom:10px;
+  }
+  .card .p{
+    margin:0;
+    color:rgba(255,255,255,.74);
+    font-size:14px;
+    line-height:1.6;
+  }
+
+  /* collapsible instructions */
+  .below{
+    margin-top:18px;
+    border-radius:22px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.09);
+    overflow:hidden;
+  }
+
+  details{
+    padding:0;
+  }
+
+  summary{
+    list-style:none;
+    cursor:pointer;
+    padding:18px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    user-select:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+
+  .sum-left{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .sum-title{
+    font-weight:800;
+    letter-spacing:.01em;
+  }
+  .sum-sub{
+    font-size:12px;
+    color:rgba(255,255,255,.55);
+  }
+  .chev{
+    width:36px;height:36px;
+    display:grid;place-items:center;
+    border-radius:12px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.09);
+    color:rgba(255,255,255,.72);
+    transition:transform .2s ease;
+  }
+  details[open] .chev{ transform: rotate(180deg); }
+
+  .steps{
+    padding:0 18px 18px;
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .steps ol{
+    margin:14px 0 0;
+    padding-left:18px;
+    color:rgba(255,255,255,.78);
+    line-height:1.7;
+    font-size:14px;
+  }
+  .steps code{
+    background:rgba(0,0,0,.35);
+    border:1px solid rgba(255,255,255,.10);
+    padding:2px 7px;
+    border-radius:10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size:12px;
+    color:rgba(255,255,255,.86);
+  }
+
+  .foot{
+    text-align:center;
+    margin-top:18px;
+    color:rgba(255,255,255,.40);
+    font-size:12px;
+  }
+
+  @media (max-width: 860px){
+    .grid{ grid-template-columns:1fr; }
+    .toplinks{ display:none; }
+    .hero{ padding:36px 18px; }
+  }
+</style>
 </head>
 
 <body>
-  <!-- Update these two URLs -->
-  <script>
-    const RELEASE_ZIP_URL = "https://github.com/velascokyle/anchor/releases/download/v1.0.0/anchor-extension-v1.0.0.zip";
-    const GITHUB_REPO_URL  = "https://github.com/velascokyle/anchor";
-    const SCREENSHOT_URL   = ""; // optional: paste a screenshot URL later
-  </script>
-
-  <div class="topbar">
-    <div class="container">
-      <div class="nav">
-        <div class="brand">
-          <span class="dot"></span>
-          <span>Anchor</span>
-        </div>
-
-        <div class="navlinks">
-          <a href="#how">How it works</a>
-          <a href="#install">Install</a>
-          <a href="#faq">FAQ</a>
-        </div>
-
-        <div class="navcta">
-          <a class="ghost" id="repoLink" href="#">GitHub</a>
-          <a class="btn" id="downloadTop" href="#">Download</a>
-        </div>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="#">
+        <img src="icon48.png" alt="Anchor" />
+        <span class="name">Anchor</span>
+      </a>
+      <div class="toplinks">
+        <a href="https://github.com/velascokyle/anchor" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="#install">Install</a>
       </div>
     </div>
+
+    <section class="hero">
+      <div class="kicker">PROTOCOL STANDARD</div>
+      <h1>Return only when deliberate.</h1>
+
+      <p class="tagline">
+        Anchor watches your <b>realized</b> P&amp;L and triggers a cooldown when emotional patterns appear —
+        so you can step away, reset, and trade like a professional.
+      </p>
+
+      <div class="actions">
+        <a class="btn" href="https://github.com/velascokyle/anchor/releases/download/v1.0.0/anchor-extension-v1.0.0.zip">
+          Download for Chrome
+        </a>
+        <a class="ghost" href="https://github.com/velascokyle/anchor" target="_blank" rel="noreferrer">
+          View on GitHub →
+        </a>
+      </div>
+
+      <div class="microtrust">
+        Runs locally • No account • Designed for TradingView
+      </div>
+
+      <div class="grid" style="margin-top:22px;">
+        <div class="card">
+          <div class="t">DISCIPLINE</div>
+          <p class="p">Cooldowns that interrupt spirals before they compound.</p>
+        </div>
+        <div class="card">
+          <div class="t">CLARITY</div>
+          <p class="p">Simple triggers: consecutive losses, max daily loss, burst behavior.</p>
+        </div>
+        <div class="card">
+          <div class="t">REFLECTION</div>
+          <p class="p">A short protocol that brings you back to intentional execution.</p>
+        </div>
+      </div>
+
+      <div class="below" id="install" style="margin-top:18px;">
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="sum-title">Install in 60 seconds</div>
+              <div class="sum-sub">Closest thing to a “web store” install without the web store.</div>
+            </div>
+            <div class="chev">⌄</div>
+          </summary>
+
+          <div class="steps">
+            <ol>
+              <li>Download <code>anchor-extension-v1.0.0.zip</code> from the button above.</li>
+              <li>Unzip it. You should see a folder that contains <code>manifest.json</code>.</li>
+              <li>Open Chrome → <code>chrome://extensions</code></li>
+              <li>Turn on <code>Developer mode</code> (top-right).</li>
+              <li>Click <code>Load unpacked</code> → select the folder that has <code>manifest.json</code>.</li>
+              <li>Pin Anchor from the puzzle icon so it’s always visible.</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+
+      <div class="foot">TradingView data processed locally</div>
+    </section>
   </div>
-
-  <header class="hero">
-    <div class="container">
-      <div class="heroGrid">
-        <div>
-          <div class="kicker"><span>Live</span> TradingView discipline layer</div>
-          <h1>Real-time discipline for serious traders.</h1>
-          <p class="sub">
-            Anchor watches your <b>realized P&amp;L</b> and enforces cooldown protocols when emotional
-            patterns show up — so you stop the spiral before it starts.
-          </p>
-
-          <div class="heroActions">
-            <a class="btn" id="downloadHero" href="#">Download for Chrome</a>
-            <a class="ghost" href="#install">Install in 30 seconds</a>
-          </div>
-
-          <div class="micro">
-            <span><b>Local-only</b> processing</span>
-            <span><b>No accounts</b></span>
-            <span><b>Fast</b> setup</span>
-          </div>
-        </div>
-
-        <!-- “extension energy” card -->
-        <div class="mock" aria-label="Anchor preview card">
-          <div class="mockTop">
-            <span>Anchor</span>
-            <span class="pill">Session Architecture</span>
-          </div>
-          <div class="mockBody">
-            <div class="statRow">
-              <div class="stat">
-                <div class="label">System Status</div>
-                <div class="value" style="color: rgba(120,200,140,1);">Active</div>
-              </div>
-              <div class="stat">
-                <div class="label">Consecutive</div>
-                <div class="value">0</div>
-              </div>
-            </div>
-            <div class="stat">
-              <div class="label">Daily P&amp;L</div>
-              <div class="value" style="color: rgba(255,120,120,1);">$-39.00</div>
-            </div>
-
-            <div class="mockBtn">SETTINGS</div>
-            <div class="mockBtn">WEEKLY REVIEW</div>
-            <div class="mockBtn">P&amp;L CALENDAR</div>
-            <div class="mockBtn">VIEW JOURNAL</div>
-
-            <div class="mockFoot">TradingView data processed locally</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <section>
-    <div class="container">
-      <h2 class="sectionTitle">What Anchor does</h2>
-      <p class="sectionSub">
-        Anchor isn’t a “motivation” tool. It’s a friction layer that shows up at the exact moment
-        discipline usually fails — when you’re tilted.
-      </p>
-
-      <div class="grid3">
-        <div class="card">
-          <h3>Detects emotional patterns</h3>
-          <p>Consecutive losses, max daily loss, and bursts of overtrading. You choose the mode.</p>
-        </div>
-        <div class="card">
-          <h3>Forces a cooldown</h3>
-          <p>Overlay blocks impulsive continuation and pushes you into a short reset protocol.</p>
-        </div>
-        <div class="card">
-          <h3>Stays private</h3>
-          <p>Runs locally. No accounts. No cloud dashboards. TradingView data processed on-device.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="how">
-    <div class="container">
-      <h2 class="sectionTitle">How it works</h2>
-      <p class="sectionSub">
-        Simple loop: read realized P&amp;L changes, update session state, trigger cooldown overlay, resume when cleared.
-      </p>
-
-      <div class="steps">
-        <div class="step">
-          <div class="num">1</div>
-          <h4>Read realized P&amp;L</h4>
-          <p>Anchor listens for P&amp;L updates and trade closures so it stays aligned with your actual realized results.</p>
-        </div>
-        <div class="step">
-          <div class="num">2</div>
-          <h4>Update session state</h4>
-          <p>Consecutive losses + daily loss limit update instantly in the background service worker.</p>
-        </div>
-        <div class="step">
-          <div class="num">3</div>
-          <h4>Trigger cooldown</h4>
-          <p>If your configured threshold hits, Anchor throws the overlay and starts the cooldown timer.</p>
-        </div>
-        <div class="step">
-          <div class="num">4</div>
-          <h4>Resume clean</h4>
-          <p>After the timer and/or journal prompt, state returns to Active and you continue with clarity.</p>
-        </div>
-      </div>
-
-      <div class="shot" id="shotWrap" style="display:none;">
-        <img id="shotImg" alt="Anchor screenshot" />
-      </div>
-    </div>
-  </section>
-
-  <section id="install">
-    <div class="container">
-      <h2 class="sectionTitle">Install</h2>
-      <p class="sectionSub">
-        This is the fastest install possible without the Chrome Web Store (Web Store requires a review/publisher setup).
-      </p>
-
-      <details open>
-        <summary>
-          Install in Chrome
-          <span class="chev">✓</span>
-        </summary>
-        <div class="detailsBody">
-          <ol>
-            <li>Click <a href="#" id="downloadInstall"><b>Download</b></a>.</li>
-            <li>Unzip the file (you should get a folder like <b>anchor-extension</b>).</li>
-            <li>Open <span class="kbd">chrome://extensions</span></li>
-            <li>Turn on <b>Developer mode</b> (top-right).</li>
-            <li>Click <b>Load unpacked</b> → select the unzipped folder (the one that contains <b>manifest.json</b>).</li>
-          </ol>
-        </div>
-      </details>
-
-      <details>
-        <summary>
-          Quick “is it working?” test
-          <span class="chev">+</span>
-        </summary>
-        <div class="detailsBody">
-          <ol>
-            <li>Go to TradingView in a tab.</li>
-            <li>Open the Anchor extension popup.</li>
-            <li>Click <b>Debug: Trigger Test</b> (overlay should appear on the TradingView tab).</li>
-          </ol>
-        </div>
-      </details>
-
-      <details>
-        <summary>
-          Troubleshooting
-          <span class="chev">+</span>
-        </summary>
-        <div class="detailsBody">
-          <ul>
-            <li>If Chrome says it can’t find icons, confirm your <b>icons/</b> folder is inside the loaded folder and paths match the manifest.</li>
-            <li>If “Load unpacked” fails, make sure you selected the folder that contains <b>manifest.json</b> (not the parent folder).</li>
-          </ul>
-        </div>
-      </details>
-    </div>
-  </section>
-
-  <section id="faq">
-    <div class="container">
-      <h2 class="sectionTitle">FAQ</h2>
-      <p class="sectionSub">Short answers, no fluff.</p>
-
-      <details>
-        <summary>Why not the Chrome Web Store yet? <span class="chev">+</span></summary>
-        <div class="detailsBody">
-          Web Store publishing requires a developer account + review process. This page is the fastest “ship it” path.
-        </div>
-      </details>
-
-      <details>
-        <summary>Does it track unrealized P&amp;L? <span class="chev">+</span></summary>
-        <div class="detailsBody">
-          Anchor uses <b>realized</b> outcomes (trade closure / realized P&amp;L changes) because that’s the cleanest source of truth.
-        </div>
-      </details>
-
-      <details>
-        <summary>Is my data sent anywhere? <span class="chev">+</span></summary>
-        <div class="detailsBody">
-          No. The extension processes TradingView data locally in your browser.
-        </div>
-      </details>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      <div class="footerGrid">
-        <div class="fine">
-          <b>Anchor</b> — TradingView discipline layer. Not affiliated with TradingView.
-          Use at your own risk. No financial advice.
-        </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="ghost" id="repoLink2" href="#">GitHub</a>
-          <a class="btn" id="downloadFooter" href="#">Download</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // wire links
-    const dl = RELEASE_ZIP_URL;
-    const repo = GITHUB_REPO_URL;
-
-    const setHref = (id, href) => {
-      const el = document.getElementById(id);
-      if (el) el.href = href;
-    };
-
-    setHref("downloadTop", dl);
-    setHref("downloadHero", dl);
-    setHref("downloadFooter", dl);
-    setHref("downloadInstall", dl);
-    setHref("repoLink", repo);
-    setHref("repoLink2", repo);
-
-    // optional screenshot
-    if (SCREENSHOT_URL && SCREENSHOT_URL.trim().length > 0) {
-      const wrap = document.getElementById("shotWrap");
-      const img = document.getElementById("shotImg");
-      img.src = SCREENSHOT_URL;
-      wrap.style.display = "block";
-    }
-  </script>
 </body>
 </html>
