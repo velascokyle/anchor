@@ -93,3 +93,53 @@ body{
 }
 
 .subtle:hover{ color:rgba(255,255,255,.75); }
+.install-section {
+  margin-top: 2.5rem;
+  max-width: 600px;
+}
+
+details {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+details:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+summary {
+  font-weight: 500;
+  font-size: 0.95rem;
+  outline: none;
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::after {
+  content: " +";
+  float: right;
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+details[open] summary::after {
+  content: " –";
+}
+
+.steps {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.steps ol {
+  padding-left: 1.2rem;
+}
