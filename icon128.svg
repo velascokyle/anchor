@@ -1,0 +1,19 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#141a24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0e14;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" fill="url(#bgGradient)" rx="24"/>
+  <g transform="translate(64, 64)">
+    <g fill="none" stroke="#8ca0c8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="0" cy="-28" r="10"/>
+      <line x1="0" y1="-18" x2="0" y2="35"/>
+      <path d="M -25 28 Q 0 48, 25 28" stroke-width="8"/>
+      <line x1="-25" y1="28" x2="-30" y2="18"/>
+      <line x1="25" y1="28" x2="30" y2="18"/>
+      <line x1="-20" y1="18" x2="20" y2="18" stroke-width="8"/>
+    </g>
+  </g>
+</svg>

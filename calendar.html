@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anchor - P&L Calendar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Crimson Pro', Georgia, serif;
+      background: linear-gradient(135deg, #0a0e14 0%, #141a24 100%);
+      color: rgba(255, 255, 255, 0.9);
+      min-height: 100vh;
+      padding: 3rem 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-left {
+      flex: 1;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .button {
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .button:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .stats-overview {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .stat-card {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value.positive {
+      color: rgba(120, 200, 140, 1);
+    }
+
+    .stat-value.negative {
+      color: rgba(255, 120, 120, 1);
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .calendar-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .current-month {
+      font-size: 1.5rem;
+      font-weight: 400;
+      min-width: 200px;
+      text-align: center;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .toggle-btn {
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.6);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toggle-btn.active {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .calendar-grid {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .day-header {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.5);
+      padding: 1rem;
+      text-align: center;
+      background: rgba(10, 14, 20, 0.8);
+    }
+
+    .day-cell {
+      background: rgba(10, 14, 20, 0.6);
+      min-height: 100px;
+      padding: 0.75rem;
+      position: relative;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .day-cell:hover {
+      background: rgba(10, 14, 20, 0.8);
+    }
+
+    .day-cell.other-month {
+      opacity: 0.3;
+    }
+
+    .day-cell.today {
+      background: rgba(120, 140, 180, 0.1);
+      border: 1px solid rgba(120, 140, 180, 0.3);
+    }
+
+    .day-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 0.5rem;
+    }
+
+    .day-pnl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .day-pnl.positive {
+      color: rgba(120, 200, 140, 1);
+    }
+
+    .day-pnl.negative {
+      color: rgba(255, 120, 120, 1);
+    }
+
+    .day-trades {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .day-indicators {
+      display: flex;
+      gap: 0.25rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .indicator.journal {
+      background: rgba(140, 160, 200, 0.6);
+    }
+
+    .indicator.trigger {
+      background: rgba(255, 200, 100, 0.6);
+    }
+
+    .indicator.locked {
+      background: rgba(255, 120, 120, 0.6);
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .day-detail-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .day-detail-modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: rgba(20, 26, 36, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .modal-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-stat {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .modal-stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .modal-section {
+      margin-top: 1.5rem;
+    }
+
+    .modal-section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 1rem;
+    }
+
+    .trade-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .trade-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+
+    .trade-time {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .trade-pnl {
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .calendar-grid {
+        gap: 1px;
+        padding: 1rem;
+      }
+
+      .day-cell {
+        min-height: 80px;
+        padding: 0.5rem;
+      }
+
+      .stats-overview {
+        grid-template-columns: 1fr;
+      }
+
+      .month-nav {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <div class="logo">P&L Calendar</div>
+        <div class="subtitle">Daily Performance Tracking</div>
+      </div>
+      <div class="header-actions">
+        <a href="review.html" class="button">Weekly Review</a>
+        <a href="journal.html" class="button">Journal</a>
+        <a href="options.html" class="button">Settings</a>
+      </div>
+    </div>
+
+    <div class="stats-overview">
+      <div class="stat-card">
+        <div class="stat-value" id="monthPnL">$0.00</div>
+        <div class="stat-label">Month P&L</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="winRate">0%</div>
+        <div class="stat-label">Win Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="avgWin">$0.00</div>
+        <div class="stat-label">Avg Win</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="avgLoss">$0.00</div>
+        <div class="stat-label">Avg Loss</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="bestDay">$0.00</div>
+        <div class="stat-label">Best Day</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="worstDay">$0.00</div>
+        <div class="stat-label">Worst Day</div>
+      </div>
+    </div>
+
+    <div class="calendar-controls">
+      <div class="month-nav">
+        <button class="nav-btn" id="prevMonth">‹</button>
+        <div class="current-month" id="currentMonth">January 2024</div>
+        <button class="nav-btn" id="nextMonth">›</button>
+      </div>
+      <button class="button" id="todayBtn">Today</button>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid">
+      <!-- Calendar will be populated here -->
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot indicator journal"></div>
+        <span>Journal Entry</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot indicator trigger"></div>
+        <span>Protocol Triggered</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot indicator locked"></div>
+        <span>Session Locked</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day Detail Modal -->
+  <div class="day-detail-modal" id="dayModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modalDate">January 1, 2024</div>
+        <button class="modal-close" id="modalClose">×</button>
+      </div>
+
+      <div class="modal-stats">
+        <div class="modal-stat">
+          <div class="modal-stat-label">Net P&L</div>
+          <div class="modal-stat-value" id="modalPnL">$0.00</div>
+        </div>
+        <div class="modal-stat">
+          <div class="modal-stat-label">Total Trades</div>
+          <div class="modal-stat-value" id="modalTrades">0</div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Trade History</div>
+        <div class="trade-list" id="tradeList">
+          <!-- Trades will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="calendar.js"></script>
+</body>
+</html>

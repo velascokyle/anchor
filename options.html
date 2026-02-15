@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anchor - Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Crimson Pro', Georgia, serif;
+      background: linear-gradient(135deg, #0a0e14 0%, #141a24 100%);
+      color: rgba(255, 255, 255, 0.9);
+      min-height: 100vh;
+      padding: 3rem 2rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(20px);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .section-description {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    /* Mode Selection */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .mode-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .mode-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .mode-card.selected {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(140, 160, 200, 0.5);
+    }
+
+    .mode-card.selected::before {
+      content: '✓';
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 24px;
+      height: 24px;
+      background: rgba(140, 160, 200, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .mode-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 0.75rem;
+    }
+
+    .mode-title {
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+    }
+
+    .mode-description {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .mode-specs {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+      line-height: 1.6;
+    }
+
+    /* Settings Form */
+    .form-group {
+      margin-bottom: 2rem;
+    }
+
+    .form-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      max-width: 300px;
+      padding: 0.875rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .checkbox-item label {
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .radio-item input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .radio-item label {
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .button {
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .button:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .button-primary {
+      background: rgba(140, 160, 200, 0.2);
+      border-color: rgba(140, 160, 200, 0.3);
+    }
+
+    .button-primary:hover {
+      background: rgba(140, 160, 200, 0.3);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .success-message {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      padding: 1rem 1.5rem;
+      background: rgba(120, 200, 140, 0.2);
+      border: 1px solid rgba(120, 200, 140, 0.3);
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s;
+      pointer-events: none;
+    }
+
+    .success-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .custom-settings {
+      display: none;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .custom-settings.visible {
+      display: block;
+    }
+
+    .info-box {
+      background: rgba(140, 160, 200, 0.1);
+      border: 1px solid rgba(140, 160, 200, 0.2);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">Anchor</div>
+      <div class="subtitle">Configuration</div>
+    </div>
+
+    <!-- Mode Selection -->
+    <div class="section">
+      <div class="section-title">Protocol Mode</div>
+      <div class="section-description">
+        Select a preset mode or customize your own triggers. Each mode balances friction and performance.
+      </div>
+
+      <div class="mode-grid">
+        <div class="mode-card" data-mode="scalper">
+          <div class="mode-name">Scalper Mode</div>
+          <div class="mode-title">Low Friction</div>
+          <div class="mode-description">
+            Optimized for high-frequency traders. Shorter cooldowns, higher burst tolerance.
+          </div>
+          <div class="mode-specs">
+            • 5-min cooldown<br>
+            • 3 consecutive losses<br>
+            • 8 trades / 10 min burst
+          </div>
+        </div>
+
+        <div class="mode-card selected" data-mode="structured">
+          <div class="mode-name">Structured Mode</div>
+          <div class="mode-title">Balanced</div>
+          <div class="mode-description">
+            Recommended default. Standard cooldown protocol with measured triggers.
+          </div>
+          <div class="mode-specs">
+            • 15-min cooldown<br>
+            • 2 consecutive losses<br>
+            • Daily max loss
+          </div>
+        </div>
+
+        <div class="mode-card" data-mode="reset">
+          <div class="mode-name">Reset Mode</div>
+          <div class="mode-title">High Friction</div>
+          <div class="mode-description">
+            Maximum discipline. Triggers on every loss for complete process recalibration.
+          </div>
+          <div class="mode-specs">
+            • 15-min cooldown<br>
+            • Every loss triggers<br>
+            • Tight burst control
+          </div>
+        </div>
+
+        <div class="mode-card" data-mode="custom">
+          <div class="mode-name">Custom Mode</div>
+          <div class="mode-title">Advanced</div>
+          <div class="mode-description">
+            Fine-tune your own parameters. Configure individual triggers and behaviors.
+          </div>
+          <div class="mode-specs">
+            • Manual configuration<br>
+            • Custom thresholds<br>
+            • Flexible cooldowns
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Settings (shown when Custom mode selected) -->
+      <div class="custom-settings" id="customSettings">
+        <div class="form-group">
+          <label class="form-label">Consecutive Losses Threshold</label>
+          <input type="number" class="form-input" id="consecutiveLosses" min="1" max="10" value="2">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Max Daily Loss ($)</label>
+          <input type="number" class="form-input" id="maxDailyLoss" min="50" max="10000" step="50" value="500">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Trade Burst Detection</label>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <input type="number" class="form-input" id="burstCount" min="3" max="20" value="5" style="width: 100px;">
+            <span>trades in</span>
+            <input type="number" class="form-input" id="burstMinutes" min="1" max="60" value="10" style="width: 100px;">
+            <span>minutes</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Cooldown Duration (minutes)</label>
+          <input type="number" class="form-input" id="cooldownMinutes" min="5" max="30" step="5" value="15">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Active Triggers</label>
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <input type="checkbox" id="triggerConsecutive" value="consecutiveLosses" checked>
+              <label for="triggerConsecutive">Consecutive Losses</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="triggerMaxLoss" value="maxDailyLoss" checked>
+              <label for="triggerMaxLoss">Daily Max Loss</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="triggerBurst" value="tradeBurst">
+              <label for="triggerBurst">Trade Burst</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Max Loss Behavior</label>
+          <div class="radio-group">
+            <div class="radio-item">
+              <input type="radio" name="maxLossBehavior" id="maxLossJournal" value="journal" checked>
+              <label for="maxLossJournal">15-min journal cooldown</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="maxLossBehavior" id="maxLossLock" value="lockDay">
+              <label for="maxLossLock">End session (institutional)</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data & Privacy -->
+    <div class="section">
+      <div class="section-title">Data & Privacy</div>
+      <div class="section-description">
+        All data is stored locally on your device. Anchor does not transmit information to external servers.
+      </div>
+
+      <div class="info-box">
+        <strong>What we monitor:</strong> Realized P&L changes on TradingView's trading panel<br>
+        <strong>What we store:</strong> Daily P&L, trade counts, journal entries (local storage only)<br>
+        <strong>What we don't access:</strong> Broker credentials, account balances, open positions
+      </div>
+
+      <div class="button-group">
+        <a href="journal.html" class="button" target="_blank">View Journal History</a>
+        <button class="button" id="viewDataBtn">View Stored Data</button>
+        <button class="button" id="clearDataBtn">Clear All Data</button>
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="button-group">
+      <button class="button button-primary" id="saveBtn">Save Configuration</button>
+      <button class="button" id="resetBtn">Reset to Defaults</button>
+    </div>
+  </div>
+
+  <div class="success-message" id="successMessage">
+    Configuration saved
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

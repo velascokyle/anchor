@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anchor - Protocol Active</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-base: #0a0e14;
+      --bg-gradient-start: #0a0e14;
+      --bg-gradient-end: #141a24;
+      --text-primary: rgba(255, 255, 255, 0.92);
+      --text-secondary: rgba(255, 255, 255, 0.65);
+      --text-tertiary: rgba(255, 255, 255, 0.45);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-medium: rgba(255, 255, 255, 0.12);
+      --panel-bg: rgba(255, 255, 255, 0.03);
+      --panel-bg-hover: rgba(255, 255, 255, 0.05);
+      --accent: rgba(120, 140, 180, 0.3);
+      --breathing-ring: rgba(140, 160, 200, 0.4);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Crimson Pro', Georgia, serif;
+      background: radial-gradient(ellipse at 50% 20%, var(--bg-gradient-end), var(--bg-base));
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Fade out class for removal */
+    body.fade-out {
+      animation: fadeOut 0.4s ease-in forwards;
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+
+    /* Vignette effect */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.5) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Subtle grain texture */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1400px;
+      padding: 2rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 3rem;
+      align-items: start;
+      margin: auto;
+      animation: slideUp 0.6s ease-out 0.2s backwards;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Left column - Quote, Timer, Breathing */
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .quote-section {
+      text-align: left;
+    }
+
+    .quote-text {
+      font-size: 2rem;
+      line-height: 1.3;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .quote-attribution {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+    }
+
+    .status-section {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(20px);
+    }
+
+    .status-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+      margin-bottom: 0.75rem;
+    }
+
+    .status-reason {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .timer {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+
+    .timer-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    /* Breathing ring */
+    .breathing-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 2rem;
+    }
+
+    .breathing-ring {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid var(--breathing-ring);
+      animation: breathe 6.5s ease-in-out infinite;
+      position: relative;
+    }
+
+    .breathing-ring::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--breathing-ring) 0%, transparent 70%);
+      opacity: 0.2;
+      animation: breatheGlow 6.5s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(1.15);
+        opacity: 1;
+      }
+    }
+
+    @keyframes breatheGlow {
+      0%, 100% {
+        opacity: 0.1;
+      }
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    /* Right column - Journal */
+    .right-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .journal-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-medium);
+      border-radius: 22px;
+      padding: 2rem;
+      backdrop-filter: blur(20px);
+    }
+
+    .journal-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .journal-title {
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .journal-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .journal-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .journal-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+      margin-bottom: 1rem;
+    }
+
+    /* Radio buttons and checkboxes */
+    .radio-group,
+    .emotion-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .emotion-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .radio-option,
+    .emotion-option {
+      position: relative;
+    }
+
+    .radio-option input,
+    .emotion-option input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .radio-label,
+    .emotion-label {
+      display: block;
+      padding: 1rem 1.25rem;
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .radio-option input:checked + .radio-label,
+    .emotion-option input:checked + .emotion-label {
+      background: var(--panel-bg-hover);
+      border-color: var(--border-medium);
+      color: var(--text-primary);
+    }
+
+    .radio-label:hover,
+    .emotion-label:hover {
+      background: var(--panel-bg-hover);
+    }
+
+    /* Text input */
+    .text-input,
+    .textarea-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 0.95rem;
+      resize: vertical;
+      transition: all 0.2s ease;
+    }
+
+    .textarea-input {
+      min-height: 80px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .text-input:focus,
+    .textarea-input:focus {
+      outline: none;
+      border-color: var(--border-medium);
+      background: var(--panel-bg-hover);
+    }
+
+    .text-input::placeholder,
+    .textarea-input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    /* Submit button */
+    .submit-section {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1.25rem 2rem;
+      background: var(--panel-bg-hover);
+      border: 1px solid var(--border-medium);
+      border-radius: 14px;
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: var(--accent);
+      border-color: var(--border-medium);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .submit-note {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* Completion state */
+    .completion-message {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .completion-message.visible {
+      display: block;
+    }
+
+    .completion-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.6;
+    }
+
+    .completion-text {
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .completion-subtext {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Locked state */
+    .locked-message {
+      text-align: center;
+      padding: 3rem 2rem;
+      display: none;
+    }
+
+    .locked-message.visible {
+      display: block;
+    }
+
+    .locked-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      opacity: 0.5;
+    }
+
+    .locked-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .locked-text {
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .locked-subtext {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 1.5rem;
+      }
+
+      .quote-text {
+        font-size: 1.75rem;
+      }
+
+      .timer {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+
+      .quote-text {
+        font-size: 1.5rem;
+      }
+
+      .timer {
+        font-size: 2rem;
+      }
+
+      .journal-card {
+        padding: 1.5rem;
+      }
+
+      .emotion-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-column">
+      <div class="quote-section">
+        <div class="quote-text" id="quote"></div>
+        <div class="quote-attribution">Protocol Standard</div>
+      </div>
+
+      <div class="status-section">
+        <div class="status-label">Protocol Active</div>
+        <div class="status-reason" id="reason"></div>
+        <div class="timer" id="timer">00:00</div>
+        <div class="timer-label">Time Remaining</div>
+      </div>
+
+      <div class="breathing-container">
+        <div class="breathing-ring"></div>
+      </div>
+    </div>
+
+    <div class="right-column">
+      <div class="journal-card" id="journalCard">
+        <div class="journal-header">
+          <div class="journal-title">Reflection Protocol</div>
+          <div class="journal-subtitle">Process completed trades. Timer runs independent of journal completion.</div>
+        </div>
+
+        <form id="journalForm">
+          <!-- Execution Check -->
+          <div class="journal-section">
+            <div class="section-label">1. Execution Check</div>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" name="withinSetup" id="setupYes" value="yes" required>
+                <label for="setupYes" class="radio-label">Within setup</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" name="withinSetup" id="setupNo" value="no">
+                <label for="setupNo" class="radio-label">Outside setup</label>
+              </div>
+            </div>
+            <div id="violationSection" style="display: none; margin-top: 1rem;">
+              <textarea 
+                class="textarea-input" 
+                id="ruleViolation" 
+                placeholder="What rule was violated?"
+                rows="2"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- State Check -->
+          <div class="journal-section">
+            <div class="section-label">2. State Check</div>
+            <div class="emotion-grid">
+              <div class="emotion-option">
+                <input type="radio" name="emotion" id="emotionNeutral" value="neutral" required>
+                <label for="emotionNeutral" class="emotion-label">Neutral</label>
+              </div>
+              <div class="emotion-option">
+                <input type="radio" name="emotion" id="emotionFrustration" value="frustration">
+                <label for="emotionFrustration" class="emotion-label">Frustration</label>
+              </div>
+              <div class="emotion-option">
+                <input type="radio" name="emotion" id="emotionUrgency" value="urgency">
+                <label for="emotionUrgency" class="emotion-label">Urgency</label>
+              </div>
+              <div class="emotion-option">
+                <input type="radio" name="emotion" id="emotionAnger" value="anger">
+                <label for="emotionAnger" class="emotion-label">Anger</label>
+              </div>
+              <div class="emotion-option">
+                <input type="radio" name="emotion" id="emotionFear" value="fear">
+                <label for="emotionFear" class="emotion-label">Fear</label>
+              </div>
+              <div class="emotion-option">
+                <input type="radio" name="emotion" id="emotionFomo" value="fomo">
+                <label for="emotionFomo" class="emotion-label">FOMO</label>
+              </div>
+              <div class="emotion-option">
+                <input type="radio" name="emotion" id="emotionOverconfidence" value="overconfidence">
+                <label for="emotionOverconfidence" class="emotion-label">Overconfidence</label>
+              </div>
+              <div class="emotion-option">
+                <input type="radio" name="emotion" id="emotionFatigue" value="fatigue">
+                <label for="emotionFatigue" class="emotion-label">Fatigue</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professional Alignment -->
+          <div class="journal-section">
+            <div class="section-label">3. Professional Alignment</div>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" name="shouldContinue" id="continueYes" value="yes" required>
+                <label for="continueYes" class="radio-label">A disciplined operator would continue</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" name="shouldContinue" id="continueNo" value="no">
+                <label for="continueNo" class="radio-label">A disciplined operator would pause</label>
+              </div>
+            </div>
+            <div id="reasonSection" style="display: none; margin-top: 1rem;">
+              <textarea 
+                class="textarea-input" 
+                id="continueReason" 
+                placeholder="Why continue?"
+                rows="2"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="submit-section">
+            <button type="submit" class="submit-btn" id="submitBtn">Save Reflection</button>
+            <div class="submit-note">Journal saved locally. Timer continues regardless of completion.</div>
+          </div>
+        </form>
+
+        <div class="completion-message" id="completionMessage">
+          <div class="completion-icon">✓</div>
+          <div class="completion-text">Reflection recorded</div>
+          <div class="completion-subtext">Protocol timer continues. Access returns when time expires.</div>
+        </div>
+      </div>
+
+      <div class="locked-message" id="lockedMessage">
+        <div class="locked-icon">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Anchor symbol -->
+            <g fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Anchor ring -->
+              <circle cx="50" cy="25" r="8"/>
+              <!-- Anchor shaft -->
+              <line x1="50" y1="33" x2="50" y2="75"/>
+              <!-- Anchor flukes -->
+              <path d="M 30 65 Q 50 80, 70 65"/>
+              <line x1="30" y1="65" x2="25" y2="55"/>
+              <line x1="70" y1="65" x2="75" y2="55"/>
+              <!-- Crossbar -->
+              <line x1="35" y1="55" x2="65" y2="55"/>
+            </g>
+          </svg>
+        </div>
+        <div class="locked-text">Session Ended</div>
+        <div class="locked-subtext">Daily loss limit reached. Resume tomorrow with deliberate intent.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="overlay.js"></script>
+</body>
+</html>
