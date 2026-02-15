@@ -101,8 +101,62 @@
       height:20px;
       opacity:.9;
     }
-    .foot{
+
+    /* INSTALL SECTION */
+    .install{
+      margin:32px auto 0;
+      max-width:540px;
+      text-align:left;
+    }
+
+    details{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:16px 18px;
+      transition:all .2s ease;
+    }
+
+    details:hover{
+      border-color:rgba(255,255,255,.18);
+    }
+
+    summary{
+      font-weight:700;
+      cursor:pointer;
+      list-style:none;
+      font-size:14px;
+      color:rgba(255,255,255,.9);
+    }
+
+    summary::-webkit-details-marker{
+      display:none;
+    }
+
+    summary::after{
+      content:"+";
+      float:right;
+      opacity:.6;
+    }
+
+    details[open] summary::after{
+      content:"–";
+    }
+
+    .steps{
       margin-top:14px;
+      font-size:14px;
+      line-height:1.7;
+      color:rgba(255,255,255,.72);
+    }
+
+    .steps ol{
+      padding-left:18px;
+      margin:0;
+    }
+
+    .foot{
+      margin-top:18px;
       color:rgba(255,255,255,.45);
       font-size:12px;
     }
@@ -130,6 +184,21 @@
     <div class="preview">
       <img src="icon48.png" alt="Anchor icon" />
       <span>Anchor Extension Preview</span>
+    </div>
+
+    <div class="install">
+      <details>
+        <summary>Installation Guide</summary>
+        <div class="steps">
+          <ol>
+            <li>Download the extension above.</li>
+            <li>Unzip the downloaded file.</li>
+            <li>Open <strong>chrome://extensions</strong> in Chrome.</li>
+            <li>Enable <strong>Developer Mode</strong> (top right).</li>
+            <li>Click <strong>Load unpacked</strong> and select the unzipped folder.</li>
+          </ol>
+        </div>
+      </details>
     </div>
 
     <div class="foot">TradingView data processed locally</div>
