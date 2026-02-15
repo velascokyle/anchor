@@ -3,13 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anchor</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Anchor — Trading Discipline</title>
+  <style>
+    :root{
+      --bg1:#070b12;
+      --bg2:#0b1220;
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.62);
+      --btn:#79c48f;
+      --btnText:#06130a;
+      --card:rgba(255,255,255,.06);
+      --border:rgba(255,255,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(1200px 600px at 50% 25%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    }
+    .wrap{
+      width:min(860px,92vw);
+      text-align:center;
+      padding:72px 18px;
+    }
+    h1{
+      margin:0 0 10px;
+      font-size:clamp(44px,6vw,72px);
+      letter-spacing:-0.02em;
+      line-height:1.05;
+    }
+    .tagline{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:16px;
+    }
+    .desc{
+      margin:0 auto 28px;
+      max-width:58ch;
+      color:rgba(255,255,255,.74);
+      font-size:15px;
+      line-height:1.6;
+    }
+    .actions{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 22px;
+      border-radius:12px;
+      background:var(--btn);
+      color:var(--btnText);
+      text-decoration:none;
+      font-weight:800;
+      border:1px solid rgba(0,0,0,.15);
+      box-shadow:0 12px 30px rgba(0,0,0,.35);
+    }
+    .btn:hover{filter:brightness(1.05)}
+    .link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 18px;
+      border-radius:12px;
+      background:var(--card);
+      border:1px solid var(--border);
+      color:rgba(255,255,255,.78);
+      text-decoration:none;
+      font-weight:700;
+    }
+    .link:hover{border-color:rgba(255,255,255,.18); color:rgba(255,255,255,.9)}
+    .preview{
+      margin:26px auto 0;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:var(--card);
+      border:1px solid var(--border);
+      color:rgba(255,255,255,.78);
+      font-size:14px;
+    }
+    .preview img{
+      width:20px;
+      height:20px;
+      opacity:.9;
+    }
+    .foot{
+      margin-top:14px;
+      color:rgba(255,255,255,.45);
+      font-size:12px;
+    }
+  </style>
 </head>
-
 <body>
   <main class="wrap">
-    <h1 class="title">Anchor</h1>
+    <h1>Anchor</h1>
     <p class="tagline">Real-time discipline for serious traders.</p>
 
     <p class="desc">
@@ -17,16 +118,21 @@
       when emotional trading patterns emerge.
     </p>
 
-    <a class="btn" href="https://github.com/velascokyle/anchor/archive/refs/heads/main.zip">
-      Download for Chrome
-    </a>
+    <div class="actions">
+      <a class="btn" href="https://github.com/velasockyle/anchor/archive/refs/heads/main.zip">
+        Download for Chrome
+      </a>
+      <a class="link" href="https://github.com/velasockyle/anchor">
+        View on GitHub →
+      </a>
+    </div>
 
     <div class="preview">
-      <img src="icon48.png" alt="Anchor Extension Preview" />
+      <img src="icon48.png" alt="Anchor icon" />
       <span>Anchor Extension Preview</span>
     </div>
 
-    <a class="subtle" href="https://github.com/velascokyle/anchor">View on GitHub →</a>
+    <div class="foot">TradingView data processed locally</div>
   </main>
 </body>
 </html>
