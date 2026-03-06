@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legal — Anchor</title>
+  <meta name="description" content="Terms of Service, Privacy Policy, and Risk Disclaimer for Anchor.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-base: #0a0e14;
+      --bg-gradient-end: #141a24;
+      --text-primary: rgba(255, 255, 255, 0.92);
+      --text-secondary: rgba(255, 255, 255, 0.65);
+      --text-tertiary: rgba(255, 255, 255, 0.45);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --panel-bg: rgba(255, 255, 255, 0.03);
+      --accent-bright: rgba(140, 160, 200, 1);
+    }
+
+    body {
+      font-family: 'Crimson Pro', Georgia, serif;
+      background: radial-gradient(ellipse at 50% 10%, var(--bg-gradient-end), var(--bg-base));
+      background-attachment: fixed;
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Nav */
+    nav {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .nav-back {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+      text-decoration: none;
+    }
+
+    .nav-back:hover { color: var(--text-secondary); }
+
+    /* Page header */
+    .page-header {
+      padding: 5rem 0 3rem;
+    }
+
+    .page-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-tertiary);
+      margin-bottom: 1rem;
+    }
+
+    .page-title {
+      font-size: 2.8rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .page-updated {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* Table of contents */
+    .toc {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .toc-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+      margin-bottom: 1rem;
+    }
+
+    .toc a {
+      display: block;
+      color: var(--accent-bright);
+      text-decoration: none;
+      font-size: 1.05rem;
+      padding: 0.35rem 0;
+    }
+
+    .toc a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Legal section */
+    .legal-section {
+      margin-bottom: 5rem;
+      padding-bottom: 5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .legal-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .legal-section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+      margin-bottom: 1rem;
+    }
+
+    .legal-section-title {
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 2rem;
+    }
+
+    .legal-body {
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: var(--text-secondary);
+    }
+
+    .legal-body p {
+      margin-bottom: 1.25rem;
+    }
+
+    .legal-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border-subtle);
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-text {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      line-height: 1.8;
+    }
+
+    .footer-text a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Anchor</a>
+    <a href="/" class="nav-back">← Back to Home</a>
+  </nav>
+
+  <div class="container">
+
+    <div class="page-header">
+      <p class="page-label">Legal</p>
+      <h1 class="page-title">Terms, Privacy & Disclaimer</h1>
+      <p class="page-updated">Last updated: March 2026</p>
+    </div>
+
+    <div class="toc">
+      <p class="toc-label">On this page</p>
+      <a href="#terms">Terms of Service</a>
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#disclaimer">Risk Disclaimer</a>
+    </div>
+
+    <!-- TERMS OF SERVICE -->
+    <div class="legal-section" id="terms">
+      <p class="legal-section-label">Section 01</p>
+      <h2 class="legal-section-title">Terms of Service</h2>
+      <div class="legal-body">
+        <p>Anchor is a browser extension designed to help traders enforce personal discipline and risk management rules while using TradingView.</p>
+        <p>The software monitors visible profit and loss values within the TradingView interface and triggers cooldown timers, journaling prompts, and behavioral safeguards when predefined rules are violated.</p>
+        <p>Anchor does not place trades, execute orders, access brokerage accounts, or interact with broker APIs. All trading decisions remain the responsibility of the user.</p>
+        <p>By using Anchor, you acknowledge that you are solely responsible for your trading activity and any financial outcomes that result from it.</p>
+        <p>Subscription access to Anchor is offered through a recurring monthly subscription following a free trial period. Users may cancel their subscription at any time through their payment provider.</p>
+      </div>
+    </div>
+
+    <!-- PRIVACY POLICY -->
+    <div class="legal-section" id="privacy">
+      <p class="legal-section-label">Section 02</p>
+      <h2 class="legal-section-title">Privacy Policy</h2>
+      <div class="legal-body">
+        <p>Anchor is designed with a privacy-first architecture.</p>
+        <p>All user configuration data, journal entries, and session tracking information are stored locally in the user's browser using local storage.</p>
+        <p>Anchor does not transmit trading activity, personal trading data, or journal entries to external servers.</p>
+        <p>Anchor does not access broker credentials, brokerage accounts, or trading platform authentication systems.</p>
+        <p>Payments and subscription management are handled securely through Stripe. Stripe may collect and process payment information in accordance with their own privacy policy.</p>
+      </div>
+    </div>
+
+    <!-- RISK DISCLAIMER -->
+    <div class="legal-section" id="disclaimer">
+      <p class="legal-section-label">Section 03</p>
+      <h2 class="legal-section-title">Risk Disclaimer</h2>
+      <div class="legal-body">
+        <p>Trading futures, derivatives, and other financial instruments involves substantial risk and may result in financial loss.</p>
+        <p>Anchor is a behavioral risk management tool designed to help traders enforce personal discipline rules. It does not provide trading advice, financial recommendations, or investment strategies.</p>
+        <p>Anchor does not guarantee profitability and cannot prevent trading losses.</p>
+        <p>Users are solely responsible for their trading decisions and risk management practices.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p class="footer-text">
+      <a href="/legal">Terms</a>
+      &nbsp;·&nbsp;
+      <a href="/legal#privacy">Privacy</a>
+      &nbsp;·&nbsp;
+      <a href="/legal#disclaimer">Disclaimer</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:tradinganchor.support@gmail.com">Contact</a>
+    </p>
+    <p class="footer-text" style="margin-top: 0.75rem;">
+      Support: <a href="mailto:tradinganchor.support@gmail.com">tradinganchor.support@gmail.com</a>
+    </p>
+    <p class="footer-text" style="margin-top: 1rem;">© 2026 Anchor. Built for operators.</p>
+  </footer>
+
+</body>
+</html>
