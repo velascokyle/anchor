@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Anchor</title>
+  <meta name="description" content="Your Anchor trial has started. Install the extension to begin.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-base: #0a0e14;
+      --bg-gradient-end: #141a24;
+      --text-primary: rgba(255, 255, 255, 0.92);
+      --text-secondary: rgba(255, 255, 255, 0.65);
+      --text-tertiary: rgba(255, 255, 255, 0.45);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-medium: rgba(255, 255, 255, 0.12);
+      --panel-bg: rgba(255, 255, 255, 0.03);
+      --accent-bright: rgba(140, 160, 200, 1);
+    }
+
+    body {
+      font-family: 'Crimson Pro', Georgia, serif;
+      background: radial-gradient(ellipse at 50% 10%, var(--bg-gradient-end), var(--bg-base));
+      background-attachment: fixed;
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    /* Logo */
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .tagline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-tertiary);
+      margin-bottom: 4rem;
+    }
+
+    /* Confirmation badge */
+    .confirmation-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(120, 200, 140, 1);
+      border: 1px solid rgba(120, 200, 140, 0.4);
+      border-radius: 20px;
+      padding: 0.4rem 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Headline */
+    .welcome-headline {
+      font-size: 2.8rem;
+      font-weight: 300;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    .welcome-sub {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+
+    .trial-note {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      margin-bottom: 4rem;
+    }
+
+    /* Steps */
+    .steps-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-medium);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      text-align: left;
+    }
+
+    .steps-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+      margin-bottom: 1.5rem;
+    }
+
+    .step-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      padding: 0.875rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .step-row:last-child { border-bottom: none; }
+
+    .step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-bright);
+      width: 1.5rem;
+      flex-shrink: 0;
+      padding-top: 0.1rem;
+    }
+
+    .step-text {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    /* CTA */
+    .btn {
+      display: inline-block;
+      padding: 1.125rem 2.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: rgba(140, 160, 200, 0.25);
+      color: var(--text-primary);
+      border: 1px solid rgba(140, 160, 200, 0.4);
+    }
+
+    .btn-primary:hover {
+      background: rgba(140, 160, 200, 0.35);
+      border-color: rgba(140, 160, 200, 0.6);
+      transform: translateY(-2px);
+    }
+
+    /* Reassurance */
+    .reassurance {
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      color: var(--text-tertiary);
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer-text {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      line-height: 1.8;
+    }
+
+    .footer-text a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="logo">Anchor</div>
+    <p class="tagline">Session Architecture for Futures Traders</p>
+
+    <div class="confirmation-badge">Trial Active</div>
+
+    <h1 class="welcome-headline">
+      Welcome to Anchor.<br>Your structure is now active.
+    </h1>
+
+    <p class="welcome-sub">Your 14-day free trial has started.</p>
+    <p class="trial-note">You will not be charged until the trial period ends.</p>
+
+    <div class="steps-card">
+      <p class="steps-label">Next Steps</p>
+      <div class="step-row">
+        <span class="step-num">1</span>
+        <span class="step-text">Install the Anchor extension using the button below</span>
+      </div>
+      <div class="step-row">
+        <span class="step-num">2</span>
+        <span class="step-text">Complete the onboarding process — takes about 90 seconds</span>
+      </div>
+      <div class="step-row">
+        <span class="step-num">3</span>
+        <span class="step-text">Anchor will begin monitoring your trading session automatically</span>
+      </div>
+    </div>
+
+    <a href="https://github.com/velascokyle/anchor/releases/download/v1.0.0/anchor-extension-v1.0.0.zip" class="btn btn-primary">
+      Install Anchor Extension
+    </a>
+
+    <p class="reassurance">
+      Anchor does not connect to broker accounts and does not place trades.<br>
+      It enforces the discipline rules you configure — nothing more.
+    </p>
+  </div>
+
+  <footer>
+    <p class="footer-text">
+      <a href="/legal">Terms</a>
+      &nbsp;·&nbsp;
+      <a href="/legal#privacy">Privacy</a>
+      &nbsp;·&nbsp;
+      <a href="/legal#disclaimer">Disclaimer</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:tradinganchor.support@gmail.com">Contact</a>
+    </p>
+    <p class="footer-text" style="margin-top: 0.5rem;">© 2026 Anchor. Built for operators.</p>
+  </footer>
+
+</body>
+</html>
