@@ -484,6 +484,16 @@
       line-height: 1.5;
     }
 
+    /* Trigger line */
+    .trigger-line {
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.6;
+    }
+
     /* Pricing */
     .pricing-card {
       max-width: 600px;
@@ -495,15 +505,50 @@
       text-align: center;
     }
 
-    .price {
+    .founding-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(140, 160, 200, 1);
+      border: 1px solid rgba(140, 160, 200, 0.4);
+      border-radius: 20px;
+      padding: 0.4rem 1rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .price-trial-label {
+      font-size: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      margin-bottom: 0.75rem;
+    }
+
+    .price-today {
       font-size: 4rem;
       font-weight: 300;
-      margin-bottom: 1rem;
       font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 0.5rem;
+    }
+
+    .price-then {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .founding-note {
+      font-size: 0.85rem;
+      color: rgba(140, 160, 200, 0.8);
+      font-style: italic;
+      margin-bottom: 2rem;
     }
 
     .price-description {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: var(--text-secondary);
       margin-bottom: 2.5rem;
       line-height: 1.7;
@@ -640,14 +685,18 @@
       <p class="identity-statement">
         You are an operator. Not a gambler.
       </p>
-      
+
+      <p class="trigger-line">
+        "If you can't stop after the first red trade, you don't need more strategy — you need structure."
+      </p>
+
       <div class="cta-group">
-        <a href="https://github.com/velascokyle/anchor/releases/download/v1.0.0/anchor-extension-v1.0.0.zip" class="btn btn-primary">Download Extension</a>
+        <a href="#" class="btn btn-primary cta-trial">Start Free Trial</a>
         <a href="#features" class="btn btn-secondary">See How It Works</a>
       </div>
-      
+
       <p class="proof-statement">
-        TradingView integration · Local-first privacy · Zero data transmission
+        TradingView integration · Local-first privacy · 14-day free trial
       </p>
     </div>
   </section>
@@ -815,7 +864,7 @@
         </div>
         <div>
           <p class="feature-description">
-            Four mode presets: Scalper (low friction, 5-min cooldowns), Structured (balanced, 15-min protocol), Reset (high friction, every loss triggers), Custom (manual configuration). Triggers include consecutive loss count, daily max loss threshold, and trade burst detection. You define your operational limits. Anchor enforces them.
+            Four mode presets: Scalper (low friction, 5-min cooldowns), Structured (balanced, 15-min protocol), Reset (high friction, every loss triggers), Custom (manual configuration). Triggers include consecutive loss count and daily max loss threshold. You define your operational limits. Anchor enforces them.
           </p>
           <div class="feature-benefit">
             <strong>Prevents:</strong> Misaligned risk parameters, one-size-fits-all discipline, trading style friction. Adapts to your strategy without compromising containment.
@@ -830,7 +879,7 @@
         </div>
         <div>
           <p class="feature-description">
-            When daily loss limit is breached, you can configure Anchor to either trigger a standard cooldown or lock the session entirely until the next trading day. Institutional desks don't let traders "try again" after catastrophic drawdown. Neither does Anchor.
+            When daily loss limit is breached, choose your enforcement mode. <strong>Hard Lock</strong> blocks all chart access until the next trading session — no re-entry, no exceptions. <strong>Discipline Mode</strong> permits paper trading practice during the lockout as a behavioral outlet, but enforces accountability if live trading is attempted while locked. Paper trading accounts still receive cooldown and journal overlays regardless of mode — behavioral training is always active.
           </p>
           <div class="feature-benefit">
             <strong>Prevents:</strong> Session-ending blowouts, revenge trading spirals, "just one more trade" capital erosion. Enforces the daily discipline boundary you set.
@@ -978,8 +1027,8 @@
         </div>
       </div>
       
-      <p class="section-description" style="margin-top: 3rem; text-align: center; font-size: 0.95rem; font-style: italic;">
-        These are aggregated self-reported metrics from beta users over 90-day periods. Your results depend on your commitment to the protocol. Anchor enforces structure—you still execute the trades.
+      <p class="section-description" style="margin-top: 3rem; text-align: center; font-size: 0.9rem; font-style: italic; color: var(--text-tertiary);">
+        Beta users, self-reported. Results vary. Individual results depend on commitment to the protocol and existing trading behavior. Anchor enforces structure — you still execute the trades.
       </p>
     </div>
   </section>
@@ -991,11 +1040,17 @@
       <h2 class="section-title">Premium behavioral infrastructure</h2>
       
       <div class="pricing-card">
-        <div class="price">Free</div>
+        <div class="founding-badge" id="foundingBadge">Founding Member — March Only</div>
+
+        <div class="price-trial-label">14-Day Free Trial</div>
+        <div class="price-today">$0 today</div>
+        <div class="price-then" id="priceThen">Then $19.99/mo</div>
+        <div class="founding-note" id="foundingNote">Founding Member rate — locked in for life</div>
+
         <p class="price-description">
-          Currently offered at no cost during initial release. Institutional-grade discipline architecture for serious traders. No subscription, no upsells, no gimmicks.
+          Card required. Cancel anytime before the trial ends and you won't be charged.
         </p>
-        
+
         <ul class="price-features">
           <li>Real-time P&L monitoring & trade detection</li>
           <li>Customizable trigger thresholds & modes</li>
@@ -1004,12 +1059,14 @@
           <li>Daily P&L calendar & performance tracking</li>
           <li>Weekly institutional-style coaching reviews</li>
           <li>Privacy-first local storage (zero data transmission)</li>
-          <li>Lifetime updates & maintenance</li>
         </ul>
-        
-        <a href="https://github.com/velascokyle/anchor/releases/download/v1.0.0/anchor-extension-v1.0.0.zip" class="btn btn-primary" style="width: 100%;">Download Now</a>
-        
-        <p style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-tertiary); line-height: 1.7;">
+
+        <a href="#" class="btn btn-primary cta-trial" style="width: 100%;">Start Free Trial</a>
+
+        <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-tertiary); line-height: 1.7;">
+          14-day free trial. Card required. Cancel anytime.
+        </p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary); line-height: 1.7;">
           Chrome extension for TradingView. Installation takes 90 seconds. Behavioral containment starts immediately.
         </p>
       </div>
@@ -1023,6 +1080,41 @@
       <h2 class="section-title">Frequently asked questions</h2>
       
       <div class="faq">
+        <div class="faq-item">
+          <h3 class="faq-question">Is a card required for the free trial?</h3>
+          <p class="faq-answer">
+            Yes. A payment method is required to start the trial. You won't be charged anything if you cancel before the 14 days are up. After the trial, billing begins automatically at your locked rate — $19.99/mo if you started in March, $29.99/mo otherwise.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3 class="faq-question">What happens after the 14-day trial?</h3>
+          <p class="faq-answer">
+            Your subscription activates at the rate locked in at signup. If you started your trial during March, you keep the $19.99/mo Founding Member rate permanently — even after the price increases. Trial start date determines your permanent price tier.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3 class="faq-question">Can I cancel anytime?</h3>
+          <p class="faq-answer">
+            Yes. Cancel during the trial and you owe nothing. Cancel after the trial ends and billing stops at the end of your current billing cycle. No penalties, no retention flows.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3 class="faq-question">What's the difference between Hard Lock and Discipline Mode?</h3>
+          <p class="faq-answer">
+            Hard Lock is the default. When you breach your daily loss limit, chart access is removed entirely until the next trading session — no re-entry under any circumstances. Discipline Mode allows you to continue on paper trading as a behavioral outlet, but will enforce an accountability overlay if you attempt to re-enter live trading while locked. Both modes enforce cooldown and journal protocols when triggered.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3 class="faq-question">Does Anchor monitor paper trading accounts?</h3>
+          <p class="faq-answer">
+            Yes. Paper trading accounts still receive cooldown overlays and journal protocols when consecutive loss triggers fire. The max daily loss hard lock applies to live accounts only — paper trading is monitored for behavioral training, not capital enforcement. This is intentional: you should build disciplined habits in simulation before they matter in live accounts.
+          </p>
+        </div>
+
         <div class="faq-item">
           <h3 class="faq-question">Does this place trades for me?</h3>
           <p class="faq-answer">
@@ -1085,17 +1177,21 @@
   <!-- FINAL CTA -->
   <section class="final-cta">
     <div class="container">
+      <p class="trigger-line" style="margin-bottom: 2rem;">
+        "If you can't stop after the first red trade, you don't need more strategy — you need structure."
+      </p>
+
       <p class="final-statement">
         You know what you're supposed to do.<br>
         Anchor ensures you actually do it.
       </p>
-      
+
       <div class="cta-group">
-        <a href="https://github.com/velascokyle/anchor/releases/download/v1.0.0/anchor-extension-v1.0.0.zip" class="btn btn-primary">Download Extension</a>
+        <a href="#" class="btn btn-primary cta-trial">Start Free Trial</a>
       </div>
-      
+
       <p class="proof-statement" style="margin-top: 2rem;">
-        Institutional discipline. Retail accessibility. Zero cost.
+        Institutional discipline. Retail accessibility. 14-day free trial.
       </p>
     </div>
   </section>
@@ -1112,6 +1208,40 @@
       </p>
     </div>
   </footer>
+
+  <script>
+    // ── Pricing configuration ───────────────────────────────────────────────
+    const FOUNDING_PRICE        = 19.99;
+    const STANDARD_PRICE        = 29.99;
+    const FOUNDING_DEADLINE_UTC = new Date('2026-04-01T00:00:00Z').getTime();
+
+    // Replace these with your Stripe Payment Link URLs (buy.stripe.com/xxx)
+    const STRIPE_FOUNDING_URL  = 'https://buy.stripe.com/8x23cv2BC2wD0mo048aAw01'; // price_1T761QCBNN4HJVo5lapWKkta — $19.99
+    const STRIPE_STANDARD_URL  = '#'; // price_1T768ACBNN4HJVo5LJoWnbpH — $29.99
+    // ───────────────────────────────────────────────────────────────────────
+
+    (function applyPricingGate() {
+      const isFoundingEligible = Date.now() < FOUNDING_DEADLINE_UTC;
+      const activePrice        = isFoundingEligible ? FOUNDING_PRICE  : STANDARD_PRICE;
+      const activeURL          = isFoundingEligible ? STRIPE_FOUNDING_URL : STRIPE_STANDARD_URL;
+
+      // Route all trial CTAs
+      document.querySelectorAll('.cta-trial').forEach(function(el) {
+        el.href = activeURL;
+      });
+
+      // Update price card
+      var priceThen    = document.getElementById('priceThen');
+      var foundingNote = document.getElementById('foundingNote');
+      var foundingBadge = document.getElementById('foundingBadge');
+
+      if (!isFoundingEligible) {
+        if (priceThen)    priceThen.textContent = 'Then $' + STANDARD_PRICE.toFixed(2) + '/mo';
+        if (foundingNote) foundingNote.style.display = 'none';
+        if (foundingBadge) foundingBadge.style.display = 'none';
+      }
+    })();
+  </script>
 
 </body>
 </html>
