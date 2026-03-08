@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Legal — Anchor</title>
   <meta name="description" content="Terms of Service, Privacy Policy, and Risk Disclaimer for Anchor.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,7 +21,7 @@
     }
 
     body {
-      font-family: 'Crimson Pro', Georgia, serif;
+      font-family: Georgia, "Times New Roman", serif;
       background: radial-gradient(ellipse at 50% 10%, var(--bg-gradient-end), var(--bg-base));
       background-attachment: fixed;
       color: var(--text-primary);
@@ -48,7 +45,6 @@
       padding: 0 2rem;
     }
 
-    /* Nav */
     nav {
       position: relative;
       z-index: 2;
@@ -61,14 +57,14 @@
 
     .nav-logo {
       font-size: 1.5rem;
-      font-weight: 300;
+      font-weight: 400;
       letter-spacing: -0.02em;
       text-decoration: none;
       color: var(--text-primary);
     }
 
     .nav-back {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
@@ -78,13 +74,12 @@
 
     .nav-back:hover { color: var(--text-secondary); }
 
-    /* Page header */
     .page-header {
       padding: 5rem 0 3rem;
     }
 
     .page-label {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.2em;
@@ -94,18 +89,17 @@
 
     .page-title {
       font-size: 2.8rem;
-      font-weight: 300;
+      font-weight: 400;
       letter-spacing: -0.02em;
       margin-bottom: 1rem;
     }
 
     .page-updated {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 0.75rem;
       color: var(--text-tertiary);
     }
 
-    /* Table of contents */
     .toc {
       background: var(--panel-bg);
       border: 1px solid var(--border-subtle);
@@ -115,7 +109,7 @@
     }
 
     .toc-label {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
@@ -131,9 +125,11 @@
       padding: 0.35rem 0;
     }
 
-    .toc a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .toc a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
 
-    /* Legal section */
     .legal-section {
       margin-bottom: 5rem;
       padding-bottom: 5rem;
@@ -145,7 +141,7 @@
     }
 
     .legal-section-label {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
@@ -173,7 +169,6 @@
       margin-bottom: 0;
     }
 
-    /* Footer */
     footer {
       padding: 3rem 2rem;
       text-align: center;
@@ -192,6 +187,42 @@
       color: inherit;
       text-decoration: underline;
       text-underline-offset: 3px;
+    }
+
+    @media (max-width: 640px) {
+      nav {
+        padding: 1.5rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .container {
+        padding: 0 1.25rem;
+      }
+
+      .page-header {
+        padding: 3.5rem 0 2.5rem;
+      }
+
+      .page-title {
+        font-size: 2.2rem;
+      }
+
+      .legal-section-title {
+        font-size: 1.65rem;
+      }
+
+      .toc {
+        padding: 1.5rem;
+      }
+
+      .legal-body {
+        font-size: 1.02rem;
+      }
+
+      footer {
+        padding: 2.5rem 1.25rem;
+      }
     }
   </style>
 </head>
@@ -217,42 +248,40 @@
       <a href="#disclaimer">Risk Disclaimer</a>
     </div>
 
-    <!-- TERMS OF SERVICE -->
     <div class="legal-section" id="terms">
       <p class="legal-section-label">Section 01</p>
       <h2 class="legal-section-title">Terms of Service</h2>
       <div class="legal-body">
         <p>Anchor is a browser extension designed to help traders enforce personal discipline and risk management rules while using TradingView.</p>
-        <p>The software monitors visible profit and loss values within the TradingView interface and triggers cooldown timers, journaling prompts, and behavioral safeguards when predefined rules are violated.</p>
-        <p>Anchor does not place trades, execute orders, access brokerage accounts, or interact with broker APIs. All trading decisions remain the responsibility of the user.</p>
+        <p>The software monitors visible broker and profit-and-loss information within the TradingView interface and may trigger cooldown timers, journaling prompts, lock screens, and related behavioral safeguards when predefined rules are violated.</p>
+        <p>Anchor does not place trades, execute orders, access brokerage accounts, or interact with broker APIs. All trading decisions remain the sole responsibility of the user.</p>
         <p>By using Anchor, you acknowledge that you are solely responsible for your trading activity and any financial outcomes that result from it.</p>
-        <p>Subscription access to Anchor is offered through a recurring monthly subscription following a free trial period. Users may cancel their subscription at any time through their payment provider.</p>
+        <p>Access to Anchor may be offered through a recurring subscription following a free trial period. Users may cancel their subscription at any time through their payment provider or billing portal, subject to the terms of that provider.</p>
       </div>
     </div>
 
-    <!-- PRIVACY POLICY -->
     <div class="legal-section" id="privacy">
       <p class="legal-section-label">Section 02</p>
       <h2 class="legal-section-title">Privacy Policy</h2>
       <div class="legal-body">
         <p>Anchor is designed with a privacy-first architecture.</p>
-        <p>All user configuration data, journal entries, and session tracking information are stored locally in the user's browser using local storage.</p>
-        <p>Anchor does not transmit trading activity, personal trading data, or journal entries to external servers.</p>
+        <p>All user configuration data, journal entries, session tracking information, and trading-related behavioral data are stored locally on the user’s device using browser storage.</p>
+        <p>Anchor reads visible content from TradingView only as needed to perform its core function, including detecting broker context, profit-and-loss values, and rule-violation conditions within the page interface.</p>
+        <p>Anchor does not transmit trading activity, trading journal entries, or behavioral session data to external servers.</p>
         <p>Anchor does not access broker credentials, brokerage accounts, or trading platform authentication systems.</p>
-        <p>Payments and subscription management are handled securely through Stripe. Stripe may collect and process payment information in accordance with their own privacy policy.</p>
-        <p>License key validation is performed by transmitting only the license key to Anchor's servers to verify subscription status. No trading data, journal entries, or personal information is included in this request.</p>
+        <p>License key validation is performed by transmitting the user’s license key to Anchor’s servers to verify subscription or activation status. No trading activity, journal entries, or behavioral session data is included in this request.</p>
+        <p>Payments and subscription management may be handled through Stripe or another payment provider. Those providers may collect and process payment information in accordance with their own terms and privacy policies.</p>
       </div>
     </div>
 
-    <!-- RISK DISCLAIMER -->
     <div class="legal-section" id="disclaimer">
       <p class="legal-section-label">Section 03</p>
       <h2 class="legal-section-title">Risk Disclaimer</h2>
       <div class="legal-body">
-        <p>Trading futures, derivatives, and other financial instruments involves substantial risk and may result in financial loss.</p>
-        <p>Anchor is a behavioral risk management tool designed to help traders enforce personal discipline rules. It does not provide trading advice, financial recommendations, or investment strategies.</p>
-        <p>Anchor does not guarantee profitability and cannot prevent trading losses.</p>
-        <p>Users are solely responsible for their trading decisions and risk management practices.</p>
+        <p>Trading futures, derivatives, and other financial instruments involves substantial risk and may result in significant financial loss.</p>
+        <p>Anchor is a behavioral risk-management tool designed to help traders enforce personal discipline rules. It does not provide trading advice, financial recommendations, investment strategies, or brokerage services.</p>
+        <p>Anchor does not guarantee profitability, performance improvement, or loss prevention.</p>
+        <p>Users are solely responsible for their trading decisions, risk management practices, and compliance with any applicable broker or prop-firm rules.</p>
       </div>
     </div>
 
